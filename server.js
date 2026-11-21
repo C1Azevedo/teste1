@@ -53,13 +53,14 @@ function normalizeEvent(e) {
       abbr: t.team.abbreviation,
       name: t.team.displayName,
       logo: t.team.logo || t.team.logoDark || null,
+      nick: t.team.name,
+      color: t.team.color || null,
+      alt: t.team.alternateColor || null,
       record: rec ? rec.summary : '',
       score: t.score != null ? Number(t.score) : null,
       winner: !!t.winner,
     };
   };
-  const names = [];
-  for (const b of c.broadcasts || []) for (const n of b.names || []) if (!names.includes(n)) names.push(n);
   return {
     id: e.id,
     date: e.date,
@@ -67,7 +68,6 @@ function normalizeEvent(e) {
     statusDetail: e.status.type.shortDetail,
     neutral: !!c.neutralSite,
     venue: c.venue ? c.venue.fullName : '',
-    broadcast: names.join(', '),
     away: side('away'),
     home: side('home'),
   };

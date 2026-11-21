@@ -2,6 +2,7 @@
   const TZ = 'America/Sao_Paulo';
   const $ = (id) => document.getElementById(id);
   const listEl = $('list'), weeksEl = $('weeks'), statusEl = $('status');
+  $('defs').innerHTML = Field.defs();
   let calendar = [], currentKey = null, selected = null, timer = null, reqId = 0;
 
   const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -23,8 +24,7 @@
   }
 
   function team(t, mark) {
-    const img = t.logo ? `<img src="${esc(t.logo)}" alt="" loading="lazy" onerror="this.outerHTML='<div class=ph></div>'">` : '<div class="ph"></div>';
-    return `<div class="team" title="${esc(t.name)}">${img}<div class="abbr">${mark ? `<span class="mark">${mark}</span>` : ''}${esc(t.abbr)}</div><div class="rec">${esc(t.record)}</div></div>`;
+    return `<div class="team" title="${esc(t.name)}"><div class="abbr">${mark ? `<span class="mark">${mark}</span>` : ''}${esc(t.abbr)}</div><div class="rec">${esc(t.record)}</div></div>`;
   }
 
   function center(g) {
@@ -42,10 +42,10 @@
   }
 
   function card(g) {
-    const bc = g.broadcast || 'ESPN e Disney Plus';
-    return `<article class="card">
+    return `<article class="card" aria-label="${esc(g.away.name)} em ${esc(g.home.name)}">
+      ${Field.render(g)}
       <div class="match">${team(g.away, '')}<div class="center">${center(g)}</div>${team(g.home, g.neutral ? 'vs' : '@')}</div>
-      <div class="foot"><span>${esc(g.venue)}</span><span class="bc">${esc(bc)}</span></div>
+      <div class="foot">${esc(g.venue)}</div>
     </article>`;
   }
 
